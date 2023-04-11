@@ -1,0 +1,103 @@
+variables:
+  - name: access_key
+    type: string
+  - name: config_banner_text
+    type: string
+    description: The text that will appear in the top banner in the cluster
+  - name: gitops_repo_repo
+    type: string
+    description: The short name of the repository (i.e. the part after the org/group name)
+  - name: vpn_authentication_saml_provider_arn
+    type: string
+    description: >-
+      (Optional) The ARN of the IAM SAML identity provider if type is
+      federated-authentication.
+  - name: aws-ec2-bastion_ami_id
+    type: string
+    description: AMI ID for bastion host
+    value: ''
+  - name: aws-ec2-bastion_instance_type
+    type: string
+    description: EC2 Instance Type 2 default
+    value: t2.micro
+  - name: cluster_compute-machine-type
+    type: string
+    description: >-
+      Instance type for the compute nodes. Determines the amount of memory and
+      vCPU allocated to each compute node. Default m5.xlarge
+    value: m5.xlarge
+  - name: cluster_no_of_compute_nodes
+    type: number
+    description: Number of worker nodes to be provisioned
+    value: 1
+  - name: cluster_ocp_version
+    type: string
+    description: Version of OpenShift that will be used to install the cluster
+    value: 4.9.15
+  - name: gitops_repo_host
+    type: string
+    description: >-
+      The host for the git repository. The git host used can be a GitHub, GitHub
+      Enterprise, Gitlab, Bitbucket, Gitea or Azure DevOps server. If the host
+      is null assumes in-cluster Gitea instance will be used.
+    value: ''
+  - name: gitops_repo_org
+    type: string
+    description: >-
+      The org/group where the git repository exists/will be provisioned. If the
+      value is left blank then the username org will be used.
+    value: ''
+  - name: gitops_repo_project
+    type: string
+    description: >-
+      The project that will be used for the git repo. (Primarily used for Azure
+      DevOps repos)
+    value: ''
+  - name: gitops_repo_username
+    type: string
+    description: The username of the user with access to the repository
+    value: ''
+  - name: multi-zone
+    type: bool
+    description: Create subnets in multiple zones
+    value: true
+  - name: name_prefix
+    type: string
+    description: Prefix to be added to the names of resources which are being provisioned
+    value: ''
+  - name: ngw_connectivity_type
+    type: string
+    description: >-
+      (Optional) Connectivity type for the gateway. Valid values are private and
+      public. Defaults to public.
+    value: public
+  - name: provision
+    type: bool
+    description: >-
+      Flag indicating that the instance should be provisioned. If false then an
+      existing instance will be looked up
+    value: true
+  - name: region
+    type: string
+    description: The deployment region
+    value: ap-south-1
+  - name: resource_group_name
+    type: string
+    description: >-
+      The name of the resource group where the VPC is deployed. On AWS this
+      value becomes a tag.
+    value: default
+  - name: vpn_allowed_cidr_ranges
+    type: list(string)
+    description: List of CIDR ranges from which access is allowed.
+    value:
+      - 10.0.0.0/16
+  - name: vpn_client_cidr_block
+    type: string
+    description: client cidr block for vpn
+    value: 172.13.0.0/16
+  - name: vpn_dns_servers
+    type: list(string)
+    description: List of DNS Servers.
+    value:
+      - 10.0.0.2

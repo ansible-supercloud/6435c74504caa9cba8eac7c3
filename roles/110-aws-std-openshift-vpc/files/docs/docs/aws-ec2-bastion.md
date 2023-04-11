@@ -1,0 +1,105 @@
+# AWS Bastion module
+
+Module to provision ec2 on aws
+
+
+## Software dependencies
+
+The module depends on the following software components:
+
+### Terraform version
+
+- \>= v0.15
+
+### Terraform providers
+
+
+- aws (hashicorp/aws)
+
+### Module dependencies
+
+
+- aws-ssh-key - [github.com/cloud-native-toolkit/terraform-aws-ssh-key](https://github.com/cloud-native-toolkit/terraform-aws-ssh-key) (>= 1.0.0)
+- aws-vpc - [github.com/cloud-native-toolkit/terraform-aws-vpc](https://github.com/cloud-native-toolkit/terraform-aws-vpc) (>= 1.0.0)
+- aws-vpc-subnets - [github.com/cloud-native-toolkit/terraform-aws-vpc-subnets](https://github.com/cloud-native-toolkit/terraform-aws-vpc-subnets) (>= 1.0.0)
+
+## Example usage
+
+```hcl
+module "aws-ec2-bastion" {
+  source = "github.com/cloud-native-toolkit/terraform-aws-bastion"
+
+  allow_ssh_from = var.aws-ec2-bastion_allow_ssh_from == null ? null : jsondecode(var.aws-ec2-bastion_allow_ssh_from)
+  ami_id = var.aws-ec2-bastion_ami_id
+  base_security_group = var.aws-ec2-bastion_base_security_group
+  init_script = var.aws-ec2-bastion_init_script
+  instance_type = var.aws-ec2-bastion_instance_type
+  label = var.aws-ec2-bastion_label
+  name_prefix = var.aws-ec2-bastion_name_prefix
+  pri_instance_monitoring = var.aws-ec2-bastion_pri_instance_monitoring
+  public_subnet_ids = var.aws-ec2-bastion_public_subnet_ids == null ? null : jsondecode(var.aws-ec2-bastion_public_subnet_ids)
+  publicIP = var.aws-ec2-bastion_publicIP
+  publickey = var.aws-ec2-bastion_publickey
+  pubnet_ids = var.aws-ec2-bastion_pubnet_ids == null ? null : jsondecode(var.aws-ec2-bastion_pubnet_ids)
+  root_block_device_encrypted = var.aws-ec2-bastion_root_block_device_encrypted
+  root_volume_size = var.aws-ec2-bastion_root_volume_size
+  root_volume_type = var.aws-ec2-bastion_root_volume_type
+  security_group_rules = var.aws-ec2-bastion_security_group_rules == null ? null : jsondecode(var.aws-ec2-bastion_security_group_rules)
+  ssh_key = module.bastion_access_key.swesshkeyname
+  subnet_count_private = var.aws-ec2-bastion_subnet_count_private
+  subnet_count_public = module.pub_subnets.count
+  subnet_id = var.aws-ec2-bastion_subnet_id == null ? null : jsondecode(var.aws-ec2-bastion_subnet_id)
+  subnet_ids_pri = var.aws-ec2-bastion_subnet_ids_pri == null ? null : jsondecode(var.aws-ec2-bastion_subnet_ids_pri)
+  subnet_ids_pub = module.pub_subnets.subnet_ids
+  vpc_id = module.aws-vpc.vpc_id
+  vpc_subnet_count = var.aws-ec2-bastion_vpc_subnet_count
+  vpc_subnets = var.aws-ec2-bastion_vpc_subnets
+}
+
+```
+
+## Module details
+
+### Inputs
+
+| Name | Description | Required | Default | Source |
+|------|-------------|---------|----------|--------|
+| subnet_id |  | false | [""] |  |
+| subnet_ids_pub |  | false | [] | aws-vpc-subnets.subnet_ids |
+| public_subnet_ids |  | false | [""] |  |
+| pubnet_ids |  | false | [""] |  |
+| subnet_ids_pri |  | false | [] |  |
+| subnet_count_private |  | false | 0 |  |
+| subnet_count_public |  | false | 0 | aws-vpc-subnets.count |
+| ami_id | AMI ID for bastion host | true |  |  |
+| instance_type | EC2 Instance Type 2 default | false | t2.micro |  |
+| publickey | EC2   Instance Public Key | true |  |  |
+| ssh_key | AWS EC2 Instance Public Key | true |  | aws-ssh-key.swesshkeyname |
+| publicIP | Whether to attach a public IP to EC2 instance | false | true |  |
+| root_volume_type | Type of root volume. Can be standard, gp2 or io1 | false | gp2 |  |
+| root_block_device_encrypted | Whether   to encrypt the root block device | false | true |  |
+| root_volume_size | Size of the root volume in gigabytes | false | 10 |  |
+| name_prefix | Prefix to be added to the names of resources which are being provisioned | false | swe |  |
+| pri_instance_monitoring | Enable  EC2 private instance advance monitoring | true |  |  |
+| label |  | false | bastion |  |
+| allow_ssh_from | An IP address, a CIDR block, or a single security group identifier to allow incoming SSH connection to the virtual server | false | ["0.0.0.0/0"] |  |
+| base_security_group | ID of the base security group(SG) to use for the ec2 instance. If not provided a new SG  will be created. | false | null |  |
+| security_group_rules | List of security group rules to set on the bastion security group in addition to the SSH rules | false | [] |  |
+| vpc_id |  | true |  | aws-vpc.vpc_id |
+| vpc_subnet_count |  | false | 0 |  |
+| vpc_subnets |  | true |  |  |
+| init_script | Script to run during the instance initialization. Defaults to an Ubuntu specific script when set to empty | true |  |  |
+
+### Outputs
+
+| Name | Description |
+|------|-------------|
+| instance_public_ip | The public IP address of the instance. |
+| instance_public_ip | The public IP address of the instance. |
+
+## Resources
+
+- [Documentation](https://operate.cloudnativetoolkit.dev)
+- [Module catalog](https://modules.cloudnativetoolkit.dev)
+
+> License: Apache License 2.0 | Generated by iascable (0.1.5)
